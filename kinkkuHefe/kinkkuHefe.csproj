@@ -9,6 +9,7 @@
     <RootNamespace>kinkkuHefe</RootNamespace>
     <MonoMacResourcePrefix>Resources</MonoMacResourcePrefix>
     <AssemblyName>kinkkuHefe</AssemblyName>
+    <SuppressXamMacUpsell>True</SuppressXamMacUpsell>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -101,6 +102,7 @@
     <BundleResource Include="Content\marsipaani.png" />
     <BundleResource Include="Content\elamansuola.png" />
     <BundleResource Include="Content\mustapippuri.png" />
+    <BundleResource Include="Content\KEITTIO_V6.jpg" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\" />

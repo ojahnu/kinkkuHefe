@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectTypeGuids>{948B3504-5B70-4649-8FE4-BDE1FB46EC69};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <ProjectGuid>{F38ECB53-7096-48F5-8A69-C89D796220A4}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>kinkkuHefe</RootNamespace>
+    <MonoMacResourcePrefix>Resources</MonoMacResourcePrefix>
+    <AssemblyName>kinkkuHefe</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+    <Profiling>false</Profiling>
+    <UseRefCounting>false</UseRefCounting>
+    <UseSGen>false</UseSGen>
+    <IncludeMonoRuntime>false</IncludeMonoRuntime>
+    <CreatePackage>false</CreatePackage>
+    <EnableCodeSigning>false</EnableCodeSigning>
+    <EnablePackageSigning>false</EnablePackageSigning>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+    <LinkMode>SdkOnly</LinkMode>
+    <Profiling>false</Profiling>
+    <UseRefCounting>false</UseRefCounting>
+    <UseSGen>false</UseSGen>
+    <IncludeMonoRuntime>true</IncludeMonoRuntime>
+    <CreatePackage>true</CreatePackage>
+    <CodeSigningKey>Developer ID Application</CodeSigningKey>
+    <EnableCodeSigning>true</EnableCodeSigning>
+    <EnablePackageSigning>false</EnablePackageSigning>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Jypeli">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Jypeli.Physics2d">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MonoGame.Framework">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Core" />
+    <Reference Include="MonoMac" />
+    <Reference Include="Tao.Sdl">
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Ohjelma.cs" />
+    <Compile Include="Kuvat.cs" />
+    <Compile Include="kinkkuHefe.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Info.plist" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Icon.png" />
+    <BundleResource Include="Content\keittio_v5_piirretty_versio.jpg" />
+    <BundleResource Include="Content\radio.png" />
+    <BundleResource Include="Content\tilli.png" />
+    <BundleResource Include="Content\mittaruokalusikka.png" />
+    <BundleResource Include="Content\ruiskumitta.png" />
+    <BundleResource Include="Content\jackdaniels.png" />
+    <BundleResource Include="Content\kebabkastike.png" />
+    <BundleResource Include="Content\kinkku.png" />
+    <BundleResource Include="Content\kossu.png" />
+    <BundleResource Include="Content\lanttu.png" />
+    <BundleResource Include="Content\mandariini.png" />
+    <BundleResource Include="Content\loylykauha.png" />
+    <BundleResource Include="Content\mitta1dl.png" />
+    <BundleResource Include="Content\mittateelusikka.png" />
+    <BundleResource Include="Content\msmjauhe.png" />
+    <BundleResource Include="Content\mustaherukka.png" />
+    <BundleResource Include="Content\mustakitaturska.png" />
+    <BundleResource Include="Content\sukkahousut.png" />
+    <BundleResource Include="Content\soppakauha.png" />
+    <BundleResource Include="Content\rakuuna.png" />
+    <BundleResource Include="Content\saunavihta.png" />
+    <BundleResource Include="Content\pelargonia.png" />
+    <BundleResource Include="Content\niittivyo.png" />
+    <BundleResource Include="Content\hksininen.png" />
+    <BundleResource Include="Content\xboxohjain.png" />
+    <BundleResource Include="Content\marsipaani.png" />
+    <BundleResource Include="Content\elamansuola.png" />
+    <BundleResource Include="Content\mustapippuri.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Content\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+</Project>

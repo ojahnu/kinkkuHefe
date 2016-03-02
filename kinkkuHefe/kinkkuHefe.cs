@@ -9,7 +9,7 @@ using Jypeli.Widgets;
 
 public class kinkkuHefe : PhysicsGame
 {
-
+	List<PhysicsObject> ainekset = new List<PhysicsObject>();
 	List<PhysicsObject> tuoteLista = new List<PhysicsObject> ();
 
 	// TAUSTAKUVAT
@@ -18,9 +18,9 @@ public class kinkkuHefe : PhysicsGame
 
 	int pisteenLasku = 0; // Pisteet kertyy tähän
 
-	List<String> lisättyKinkkuunString = new List<String> (); //Lisätyt tuotteet
+	List<String> lisattyKinkkuunString = new List<String> (); //Lisätyt tuotteet
 	// ALKUVALIKON KOHDAT LISTA
-	List<Label> valikonKohdat;
+	//List<Label> valikonKohdat;
 
 	// OBJEKTIT
 	PhysicsObject kinkku;
@@ -40,24 +40,8 @@ public class kinkkuHefe : PhysicsGame
 	PhysicsObject sukkahousut;
 	PhysicsObject tilli;
 
-	/*
-	// MITAT AINEKSIEN LAITTOON
-	Image ruiskumitta = LoadImage("ruiskumitta"); 				// Lisätään ruiskumitta
-	Image loylykauha = LoadImage("loylykauha"); 				// Lisätään löylykauha
-	Image mitta1dl = LoadImage("mitta1dl"); 					// Lisätään desimitan
-	Image mittaruokalusikka = LoadImage("mittaruokalusikka");	// Lisätään ruokalusikka
-	Image mittateelusikka = LoadImage("mittateelusikka"); 		// Lisätään teelusikka 
-	Image soppakauha = LoadImage("soppakauha"); 				// Lisätään soppakauha
-	*/
+	PhysicsObject logo;				// Logo fysiikkaolioksi
 
-	// LISÄÄ SOKERISIA JUTKUTUSHÄRPÄKKEITÄ
-	/*
-	Image niittivyo = LoadImage("niittivyo"); 					// Lisätään niittivyö objekti 
-	Image pelargonia = LoadImage("pelargonia"); 				// Lisätään pelargonian objekti 
-	Image radio = LoadImage("radio"); 							// Lisätään radion objekti 
-	Image xboxohjain = LoadImage("xboxohjain"); 				// Lisätään xboxohjain
-	Image saunavihta = LoadImage("saunavihta"); 				// Lisätään saunavihta
-	*/
 
 	public void LuoTuote(PhysicsObject tuote, double lkerroin, double kkerroin, string kuva){
 		tuote = new PhysicsObject (Level.Width * lkerroin, Level.Height * kkerroin, Shape.Circle);
@@ -70,35 +54,72 @@ public class kinkkuHefe : PhysicsGame
 
 	public override void Begin ()
 	{
-
-		MultiSelectWindow alkuValikko = new MultiSelectWindow("Oletko kova paistamaan kinkkua?", "OTETAAN!", "HALL OF KINKKUHEFE", "Syön mieluummin ananaspizzaa.");
-		Add(alkuValikko);
-		alkuValikko.DefaultCancel = 3;							// Peruutusnäppäimellä pelistä pihalle eli ESC poistuu pelistä kuten "Syön mieluummin ananaspizzaa"
-		Level.Background.Image = keittiokohtaus; 				// Sitten tämä kun aletaan kunnolla kokkaamaan!
-
-//		Level.Background.Image = taustakuvaEkaSiirtyma; 		// Ladataan keittiöstä lähempi kuva aloitusruudusta peliin siirtymäkohdan taustaksi.
-		IsFullScreen = true; 									// Peli asetetaan kokonäytölle.			
-		//Level.CreateVerticalBorders ();							// Pelialueelle pystysuuntaiset reunat.
-		//borders(false);
-
+		SetWindowSize (1920, 1080);								// Ikkunan koko sama kuin taustakuvien resoluutio
+		IsFullScreen = true; 									// Peli asetetaan kokonäytölle.	
+		Camera.ZoomToLevel (100);								// Koko tausta näkyvillä.
 		Mouse.IsCursorVisible = true; 							// Hiiri näkyviin.
+		SmoothTextures = false;									// Reunojen pehmennys pois käytöstä.
+		Level.Background.Image = keittiokohtaus; 					// Ladataan keittiöstä kuva pelin taustaksi.
+		Valikko ();												// Kutsutaan valikkoa heti alkuun, niin ei tarvitse pelaajan ESCiä painella.
+	}
+
+
+		void PeliKayntiin()
+		{
+			ClearAll(); 											// Tyhjennetään kenttä kaikista objekteista
+
+		Level.Background.Image = keittiokohtaus; 					// Ladataan keittiöstä kuva pelin taustaksi
+			Ainekset(ainekset);										// Lisätään ainekset kentälle, kun on valittu, että lähdetään paistamaan kinkkua.
+
+			// HIIREN KÄYTTÖ OBJEKTIEN LIIKUTTELUUN & TUTKIMISEEN
+			//Mouse.Listen (MouseButton.Left, ButtonState.Pressed, KuunteleLiiketta2, "Jos ei koordinaatio riitä ;D");
+			Mouse.Listen (MouseButton.Left, ButtonState.Down, OnkoJoValmista, "Lisää aineksia kinkkuun mausteeksi.");
+			Mouse.Listen (MouseButton.Left, ButtonState.Released, OnkoKinkunPaalla, null);
+
+			// VALIKKOON MENEMINEN
+			Keyboard.Listen (Key.Escape, ButtonState.Pressed, Valikko, "Avaa valikko");
+		}
+
+	void Valikko(){
+		ClearAll(); 											// Tyhjennetään kenttä kaikista objekteista
+		MultiSelectWindow valikko = new MultiSelectWindow("", "JOO JOO KINKKUU TULILLE", "HALL OF KINKKUHEFE", "SYÖN MIELUUMMIN ANANASPIZZAA...");
+		Level.Background.Image = keittiokohtaus; 				// Ladataan keittiöstä kuva valikon taustaksi
+		Add(valikko);
+
+
+		//HANDLERIT
+		valikko.DefaultCancel = 3;								// Kolmas nappi poistuu pelistä, kuten ESC -> YES
+		valikko.AddItemHandler(2, Exit);						// Poistu pelistä, kun nappia kaksi painetaan
+		valikko.AddItemHandler(0, PeliKayntiin);				// Aloittaa pelin kun ylintä nappia painetaan
+		valikko.AddItemHandler(1, HallOfKinkkuhefe);			// Näytetään top-score listaus 
+
+
+		logo = PhysicsObject.CreateStaticObject(923, 538);		// Logo alkuvalikon taustalle
+		logo.Image = LoadImage("hefeLogo");						// Logokuva
+		logo.Position = new Vector (0, -50);
+		Add (logo, 0);
+	}
+
+	void HallOfKinkkuhefe()
+	{
+		// Fetchaa suoraa koneen käyttäjän nimi joka on oletuksena topscore nicki
+	}
+
+	void KuunteleLiiketta2()
+	{
+		MessageDisplay.Add ("TARTU KUIN MIES!");
+		MessageDisplay.MaxMessageCount = 0;
+	}
+
+	void Ainekset(List<PhysicsObject> ainekset){
 
 		// MAUSTEET / AINEKSET OBJEKTEIKSI
 		// THÖ KINKKU
-		kinkku = PhysicsObject.CreateStaticObject(Level.Width * 0.25, Level.Height * 0.15);
-		kinkku.Image = LoadImage("kinkku");							// Lisätään kinkku
+		kinkku = PhysicsObject.CreateStaticObject (Level.Width * 0.25, Level.Height * 0.15);
+		kinkku.Image = LoadImage ("kinkku");							// Lisätään kinkku
 		kinkku.X = -200;
 		kinkku.Y = -100;
 		Add (kinkku);
-
-
-		foreach (PhysicsObject tuote in tuoteLista) {
-
-			string nimitys = tuote.ToString ();
-			LuoTuote (elamansuola, 0.1, 0.2, nimitys);
-		}
-
-
 
 		elamansuola = new PhysicsObject (Level.Width * 0.1, Level.Height * 0.2, Shape.Circle);
 		elamansuola.Image = LoadImage("elamansuola"); 				// Lisätään suolapurkki
@@ -149,86 +170,11 @@ public class kinkkuHefe : PhysicsGame
 		tuoteLista.Add (kossu);
 		Add (kossu);
 
-		/*
-		mandariini = new PhysicsObject (Level.Width * 0.2, Level.Height * 0.2);
-		mandariini.Image = LoadImage("mandariini"); 				// Lisätään mandariini
-		mandariini.X = 600;
-		mandariini.Y = 100;
-		mandariini.Tag = "aines";
-		Add (mandariini);
 
-		marsipaani = new PhysicsObject (Level.Width * 0.4, Level.Height * 0.2);
-		marsipaani.Image = LoadImage("marsipaani"); 				// Lisätään marsipaani
-		marsipaani.X = 700;
-		marsipaani.Y = 100;
-		marsipaani.Tag = "aines";
-		Add (marsipaani);
-
-		rakuuna = new PhysicsObject (Level.Width * 0.2, Level.Height * 0.2);
-		rakuuna.Image = LoadImage("rakuuna");						// Lisätään rakuuna maustepurkki
-		rakuuna.X = -100;
-		rakuuna.Y = 100;
-		rakuuna.Tag = "aines";
-		Add (rakuuna);
-
-		msmjauhe = new PhysicsObject (Level.Width * 0.2, Level.Height * 0.2);
-		msmjauhe.Image = LoadImage("msmjauhe"); 					// Lisätään MSM -jauhe kippo 
-		msmjauhe.X = -200;
-		msmjauhe.Y = 100;
-		msmjauhe.Tag = "aines";
-		Add (msmjauhe);
-
-		mustaherukka = new PhysicsObject (Level.Width * 0.2, Level.Height * 0.2);
-		mustaherukka.Image = LoadImage("mustaherukka"); 			// Lisätään mustaherukat 
-		mustaherukka.X = -300;
-		mustaherukka.Y = 100;
-		mustaherukka.Tag = "aines";
-		Add (mustaherukka);
-
-		mustakitaturska = new PhysicsObject (Level.Width * 0.2, Level.Height * 0.2);
-		mustakitaturska.Image = LoadImage("mustakitaturska"); 		// Lisätään mustakitaturskan
-		mustakitaturska.X = -400;
-		mustakitaturska.Y = 100;
-		mustakitaturska.Tag = "aines";
-		Add (mustakitaturska);
-
-		mustapippuri = new PhysicsObject (Level.Width * 0.2, Level.Height * 0.2);
-		mustapippuri.Image = LoadImage("mustapippuri"); 			// Lisätään mustapippurit
-		mustapippuri.X = -500;
-		mustapippuri.Y = 100;
-		mustapippuri.Tag = "aines";
-		Add (mustapippuri);
-
-		sukkahousut = new PhysicsObject (Level.Width * 0.2, Level.Height * 0.2);
-		sukkahousut.Image = LoadImage("sukkahousut"); 				// Lisätään sukkahousut
-		sukkahousut.X = -600;
-		sukkahousut.Y = 100;
-		sukkahousut.Tag = "aines";
-		Add (sukkahousut);
-
-		tilli = new PhysicsObject (Level.Width * 0.2, Level.Height * 0.2);
-		tilli.Image = LoadImage("tilli"); 							// Lisätään tilli
-		tilli.X = -700;
-		tilli.Y = 100;
-		tilli.Tag = "aines";
-		Add (tilli);
-
-
-
-		// OHJEKENTTÄ PELAAJALLE
-		Label tekstikentta = new Label(300, 50, "ALAHAN KOKATA POIKA!");
-		tekstikentta.X = Screen.Right - 250;
-		tekstikentta.Y = Screen.Top - 50;
-		tekstikentta.TextColor = Color.DarkGray;
-		tekstikentta.BorderColor = Color.Black;
-		Add(tekstikentta);
-*/
 
 		// HIIREN KÄYTTÖ
 		// OBJEKTIEN LIIKUTTELUUN & TUTKIMISEEN
-		Mouse.Listen (MouseButton.Left, ButtonState.Down, OnkoJoValmista, "Lisää aineksia kinkkuun mausteeksi.");
 
-		Mouse.Listen (MouseButton.Left, ButtonState.Released, OnkoKinkunPaalla, null);
 		//Mouse.Listen (MouseButton.Left, ButtonState.Down, KuunteleLiiketta2, "Lisää aineksia kinkkuun mausteeksi.");
 		//
 
@@ -240,7 +186,7 @@ public class kinkkuHefe : PhysicsGame
 	}
 
 	void OnkoJoValmista(){
-		if (lisättyKinkkuunString.Count >= 2) {
+		if (lisattyKinkkuunString.Count >= 2) {
 			Widget ruutu1 = new Widget (100.0, 50.0);
 			Label lisatytmausteet = new Label ("Hei sul ois jo tarpeeks aineita");
 			ruutu1.Add (lisatytmausteet);
@@ -279,28 +225,14 @@ public class kinkkuHefe : PhysicsGame
 	}
 		}
 
-	void alkuValikko()
-	{
-		ClearAll (); // Tyhjennetään kenttä kaikista peliolioista
 
-		valikonKohdat = new List<Label> (); // Alustetaan lista, johon valikon kohdat tulevat
-
-		Label kohta1 = new Label ("Aloita uusi peli");  // Luodaan uusi Label-olio, joka toimii uuden pelin aloituskohtana
-		kohta1.Position = new Vector (0, 40);  // Asetetaan valikon ensimmäinen kohta hieman kentän keskikohdan yläpuolelle
-		valikonKohdat.Add (kohta1);  // Lisätään luotu valikon kohta listaan jossa kohtia säilytetään
-
-		// Lisätään kaikki luodut kohdat peliin foreach-silmukalla
-		foreach (Label valikonKohta in valikonKohdat) {
-			Add (valikonKohta);
-		}
-	}
 
 	void OnkoKinkunPaalla(){			//Suolan Lisäys kinkkuun
 		if (Mouse.IsCursorOn (kinkku) && Mouse.IsCursorOn (elamansuola)) {
 			MultiSelectWindow suolaValikko = new MultiSelectWindow ("paljonko laitetaan?", "kolme kuppii", "4 tonnii", "10 metrii"); 
 			elamansuola.Destroy ();
 			Add (suolaValikko);
-			lisättyKinkkuunString.Add ("elämänsuola");
+			lisattyKinkkuunString.Add ("elämänsuola");
 			MessageDisplay.Clear ();
 			suolaValikko.ItemSelected += SuolanValinnat;
 			int i = suolaValikko.SelectedIndex;
@@ -309,7 +241,7 @@ public class kinkkuHefe : PhysicsGame
 			MultiSelectWindow suolaValikko = new MultiSelectWindow ("paljonko laitetaan?", "Ujosti", "puolet meni kokkiin", "Järvisuomi"); 
 			jackdaniels.Destroy ();
 			MessageDisplay.Clear ();
-			lisättyKinkkuunString.Add ("Jack Daniels");
+			lisattyKinkkuunString.Add ("Jack Daniels");
 			suolaValikko.ItemSelected += SuolanValinnat;
 			Add (suolaValikko);
 			int i = suolaValikko.SelectedIndex;
@@ -325,7 +257,7 @@ public class kinkkuHefe : PhysicsGame
 			MultiSelectWindow suolaValikko = new MultiSelectWindow ("paljonko laitetaan?", "yks kyrsä", "metri Heikki", "Kela poika"); 
 			hksininen.Destroy ();
 			MessageDisplay.Clear ();
-			lisättyKinkkuunString.Add ("HK-Sininen");
+			lisattyKinkkuunString.Add ("HK-Sininen");
 			suolaValikko.ItemSelected += SuolanValinnat;
 			Add (suolaValikko);
 			int i = suolaValikko.SelectedIndex;

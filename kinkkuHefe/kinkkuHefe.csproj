@@ -103,6 +103,7 @@
     <BundleResource Include="Content\elamansuola.png" />
     <BundleResource Include="Content\mustapippuri.png" />
     <BundleResource Include="Content\KEITTIO_V6.jpg" />
+    <BundleResource Include="Content\hefeLogo.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\" />

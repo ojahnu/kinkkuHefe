@@ -157,4 +157,15 @@ foreach (PhysicsObject tuote in tuoteLista) {
 	string nimitys = tuote.ToString ();
 	LuoTuote (elamansuola, 0.1, 0.2, nimitys);
 }
+
+
+
+public void LuoTuote(PhysicsObject tuote, double lkerroin, double kkerroin, string kuva){
+	tuote = new PhysicsObject (Level.Width * lkerroin, Level.Height * kkerroin, Shape.Circle);
+
+	tuote.Image = LoadImage (kuva);
+	tuote.X = 100;
+	tuote.Y = 100;
+	Add (tuote);
+}
 */

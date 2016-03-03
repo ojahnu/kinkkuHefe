@@ -17,6 +17,8 @@ public class kinkkuHefe : PhysicsGame
 	Image keittiokohtaus = LoadImage("KEITTIO_V6.jpg"); 			// Ladataan todellisen toiminnan aikainen näkymä.
 
 	int pisteenLasku = 0; // Pisteet kertyy tähän
+	int tuotteidenMaara = 4;
+
 
 	List<String> lisattyKinkkuunString = new List<String> (); //Lisätyt tuotteet
 	// ALKUVALIKON KOHDAT LISTA
@@ -43,14 +45,7 @@ public class kinkkuHefe : PhysicsGame
 	PhysicsObject logo;				// Logo fysiikkaolioksi
 
 
-	public void LuoTuote(PhysicsObject tuote, double lkerroin, double kkerroin, string kuva){
-		tuote = new PhysicsObject (Level.Width * lkerroin, Level.Height * kkerroin, Shape.Circle);
 
-		tuote.Image = LoadImage (kuva);
-		tuote.X = 100;
-		tuote.Y = 100;
-		Add (tuote);
-	}
 
 	public override void Begin ()
 	{
@@ -66,8 +61,9 @@ public class kinkkuHefe : PhysicsGame
 
 		void PeliKayntiin()
 		{
-			ClearAll(); 											// Tyhjennetään kenttä kaikista objekteista
-
+		Remove (logo);	
+		//ClearAll(); 											// Tyhjennetään kenttä kaikista objekteista
+		pisteenLasku = 0;
 		Level.Background.Image = keittiokohtaus; 					// Ladataan keittiöstä kuva pelin taustaksi
 			Ainekset(ainekset);										// Lisätään ainekset kentälle, kun on valittu, että lähdetään paistamaan kinkkua.
 
@@ -163,21 +159,13 @@ public class kinkkuHefe : PhysicsGame
 		tuoteLista.Add (lanttu);
 		Add (lanttu);
 
-		kossu = new PhysicsObject (Level.Width * 0.08, Level.Height * 0.25);
-		kossu.Image = LoadImage("kossu"); 							// Lisätään Koskenkorva viinapullo
-		kossu.X = 600;
-		kossu.Y = 30;
-		kossu.Tag = "aines";
-		tuoteLista.Add (kossu);
-		Add (kossu);
-
-
-
-		// HIIREN KÄYTTÖ
-		// OBJEKTIEN LIIKUTTELUUN & TUTKIMISEEN
-
-		//Mouse.Listen (MouseButton.Left, ButtonState.Down, KuunteleLiiketta2, "Lisää aineksia kinkkuun mausteeksi.");
-		//
+		mustakitaturska = new PhysicsObject (Level.Width * 0.25, Level.Height * 0.1);
+		mustakitaturska.Image = LoadImage("mustakitaturska"); 							// Lisätään Mustakita turska
+		mustakitaturska.X = 600;
+		mustakitaturska.Y = 30;
+		mustakitaturska.Tag = "aines";
+		tuoteLista.Add (mustakitaturska);
+		Add (mustakitaturska);
 
 
 
@@ -187,7 +175,7 @@ public class kinkkuHefe : PhysicsGame
 	}
 
 	void OnkoJoValmista(){
-		if (lisattyKinkkuunString.Count >= 2) {
+		if (lisattyKinkkuunString.Count >= 4) {
 			Widget ruutu1 = new Widget (100.0, 50.0);
 			Label lisatytmausteet = new Label ("Hei sul ois jo tarpeeks aineita");
 			ruutu1.Add (lisatytmausteet);
@@ -269,6 +257,36 @@ public class kinkkuHefe : PhysicsGame
 				pisteenLasku += 3;
 			}
 		}
+
+		else if (Mouse.IsCursorOn (kinkku) && Mouse.IsCursorOn (kebabkastike)) {
+			MultiSelectWindow suolaValikko = new MultiSelectWindow ("paljonko laitetaan?", "Liraus", "loraus", "NO nyt on makuu"); 
+			kebabkastike.Destroy ();
+			MessageDisplay.Clear ();
+			lisattyKinkkuunString.Add ("kebakastike");
+			suolaValikko.ItemSelected += SuolanValinnat;
+			Add (suolaValikko);
+			int i = suolaValikko.SelectedIndex;
+
+			if (i == 0) {
+				pisteenLasku = pisteenLasku + 2;
+			} else if (i == 1) {
+				pisteenLasku += 3;
+			} else if (i == 2) {
+				pisteenLasku += 1;
+			}
+		}
+		else if (Mouse.IsCursorOn (kinkku) && Mouse.IsCursorOn (mustakitaturska)) {
+			MultiSelectWindow suolaValikko = new MultiSelectWindow ("paljonko laitetaan?", "Kastikkeen mauste", "vähän eksoottisempi versio", "Jaa et kalakeittoo vai"); 
+			mustakitaturska.Destroy ();
+			MessageDisplay.Clear ();
+			lisattyKinkkuunString.Add ("mustakitaturska");
+			suolaValikko.ItemSelected += SuolanValinnat;
+			Add (suolaValikko);
+			int i = suolaValikko.SelectedIndex;
+
+
+		}
+
 	}
 	void SuolanValinnat(int i){
 
@@ -277,15 +295,15 @@ public class kinkkuHefe : PhysicsGame
 		{
 		case 0 :
 			MessageDisplay.Add ("nössösti lisätty");
-			MessageDisplay.MaxMessageCount = 0;
+			MessageDisplay.MaxMessageCount = 1;
 			break;
 		case 1:
 			MessageDisplay.Add ("Voi veljet");
-			MessageDisplay.MaxMessageCount = 0;
+			MessageDisplay.MaxMessageCount = 1;
 			break;
 		case 2:
 			MessageDisplay.Add ("nö älä nyt innostu");
-			MessageDisplay.MaxMessageCount = 0;
+			MessageDisplay.MaxMessageCount = 1;
 			break;
 			}
 		}
@@ -295,14 +313,12 @@ public class kinkkuHefe : PhysicsGame
 	// HIIREN KUUNTELU ELI MITÄ TAPAHTUU KUN VASEN HIIRI ON PAINETTU POHJAAN
 	void KuunteleLiiketta()
 	{   
-		
 
-			
 		if (Mouse.IsCursorOn(elamansuola)) 
 			{
 			elamansuola.Position = Mouse.PositionOnWorld;
 				
-				MessageDisplay.Add( "Käytä ensi kerralla Himalajan suolaa" );
+				MessageDisplay.Add( "Oos nyt sit varovainen sen kanssa" );
 				MessageDisplay.MaxMessageCount = 0;
 			return;
 			}
@@ -335,13 +351,21 @@ public class kinkkuHefe : PhysicsGame
 				MessageDisplay.MaxMessageCount = 0;
 			} 
 
-			else if (Mouse.IsCursorOn(kossu)) 
+		else if (Mouse.IsCursorOn(mustakitaturska)) 
 			{
-			kossu.Position = Mouse.PositionOnWorld;
+			mustakitaturska.Position = Mouse.PositionOnWorld;
 
-				MessageDisplay.Add( "Vähä kyrsää... Brus suomalaista!" );
+				MessageDisplay.Add( "Jaa no varmaan Gordon Ramsy ois ottanu saamaa" );
 				MessageDisplay.MaxMessageCount = 0;
 			}
+
+		else if (Mouse.IsCursorOn(kebabkastike)) 
+		{
+			kebabkastike.Position = Mouse.PositionOnWorld;
+
+			MessageDisplay.Add( "No nyt on kyllä gurmeé mauste" );
+			MessageDisplay.MaxMessageCount = 0;
+		}
 
 
 

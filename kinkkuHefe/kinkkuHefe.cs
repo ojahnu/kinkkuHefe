@@ -13,7 +13,7 @@ public class kinkkuHefe : PhysicsGame
 	List<PhysicsObject> tuoteLista = new List<PhysicsObject> ();
 
 	// TAUSTAKUVAT
-	Image taustakuvaEkaSiirtyma = LoadImage("aloituskuva"); 	// Ladataan keittiö taustaksi ensimmäiseen siirtymään päävalikon jälkeen.
+	Image taustakuvaEkaSiirtyma = LoadImage("keittioAlku"); 	// Ladataan keittiö taustaksi ensimmäiseen siirtymään päävalikon jälkeen.
 	Image keittiokohtaus = LoadImage("KEITTIO_V6.jpg"); 			// Ladataan todellisen toiminnan aikainen näkymä.
 
 	int pisteenLasku = 0; // Pisteet kertyy tähän
@@ -83,7 +83,7 @@ public class kinkkuHefe : PhysicsGame
 	void Valikko(){
 		ClearAll(); 											// Tyhjennetään kenttä kaikista objekteista
 		MultiSelectWindow valikko = new MultiSelectWindow("", "JOO JOO KINKKUU TULILLE", "HALL OF KINKKUHEFE", "SYÖN MIELUUMMIN ANANASPIZZAA...");
-		Level.Background.Image = keittiokohtaus; 				// Ladataan keittiöstä kuva valikon taustaksi
+		Level.Background.Image = taustakuvaEkaSiirtyma; 				// Ladataan keittiöstä kuva valikon taustaksi
 		Add(valikko);
 
 
@@ -115,57 +115,58 @@ public class kinkkuHefe : PhysicsGame
 
 		// MAUSTEET / AINEKSET OBJEKTEIKSI
 		// THÖ KINKKU
-		kinkku = PhysicsObject.CreateStaticObject (Level.Width * 0.25, Level.Height * 0.15);
+		kinkku = PhysicsObject.CreateStaticObject (Level.Width * 0.23, Level.Height * 0.13);
 		kinkku.Image = LoadImage ("kinkku");							// Lisätään kinkku
-		kinkku.X = -200;
-		kinkku.Y = -100;
+		kinkku.X = -230;
+		kinkku.Y = -35;
+		kinkku.Angle = Angle.FromDegrees (30);
 		Add (kinkku);
 
-		elamansuola = new PhysicsObject (Level.Width * 0.1, Level.Height * 0.2, Shape.Circle);
+		elamansuola = new PhysicsObject (Level.Width * 0.08, Level.Height * 0.1, Shape.Circle);
 		elamansuola.Image = LoadImage("elamansuola"); 				// Lisätään suolapurkki
-		elamansuola.X = 100;
-		elamansuola.Y = 100;
+		elamansuola.X = 30;
+		elamansuola.Y = 0;
 		elamansuola.Tag = "aines";
 		tuoteLista.Add (elamansuola);
 		Add (elamansuola);
 
-		hksininen = new PhysicsObject (Level.Width * 0.3, Level.Height * 0.1);
+		hksininen = new PhysicsObject (Level.Width * 0.1, Level.Height * 0.05);
 		hksininen.Image = LoadImage("hksininen"); 					// Lisätään HK:n sininen eli makkara
-		hksininen.X = 150;
-		hksininen.Y = 100;
+		hksininen.X = 240;
+		hksininen.Y = -60;
 		hksininen.Tag = "aines";
 		tuoteLista.Add (hksininen);
 		Add (hksininen);
 
 
-		jackdaniels = new PhysicsObject (Level.Width * 0.1, Level.Height * 0.3);
+		jackdaniels = new PhysicsObject (Level.Width * 0.07, Level.Height * 0.25);
 		jackdaniels.Image = LoadImage("jackdaniels"); 				// Lisätään Jack Daniels viskipullo
-		jackdaniels.X = 200;
-		jackdaniels.Y = 100;
+		jackdaniels.X = 130;
+		jackdaniels.Y = 30;
 		jackdaniels.Tag = "aines";
 		tuoteLista.Add (jackdaniels);
 		Add (jackdaniels);
 
-		kebabkastike = new PhysicsObject (Level.Width * 0.1, Level.Height * 0.3);
+		kebabkastike = new PhysicsObject (Level.Width * 0.1, Level.Height * 0.2);
 		kebabkastike.Image = LoadImage("kebabkastike"); 			// Lisätään kebabkastikepurkit 
 		kebabkastike.X = 300;
-		kebabkastike.Y = 100;
+		kebabkastike.Y = 30;
 		kebabkastike.Tag = "aines";
 		tuoteLista.Add (kebabkastike);
 		Add (kebabkastike);
 
-		lanttu = new PhysicsObject (Level.Width * 0.2, Level.Height * 0.2);
+		lanttu = new PhysicsObject (Level.Width * 0.15, Level.Height * 0.15);
 		lanttu.Image = LoadImage("lanttu"); 						// Lisätään kolmen lanttua
-		lanttu.X = 400;
-		lanttu.Y = 100;
+		lanttu.X = 450;
+		lanttu.Y = -40;
 		lanttu.Tag = "aines";
 		tuoteLista.Add (lanttu);
 		Add (lanttu);
 
-		kossu = new PhysicsObject (Level.Width * 0.1, Level.Height * 0.3);
+		kossu = new PhysicsObject (Level.Width * 0.08, Level.Height * 0.25);
 		kossu.Image = LoadImage("kossu"); 							// Lisätään Koskenkorva viinapullo
-		kossu.X = 500;
-		kossu.Y = 100;
+		kossu.X = 600;
+		kossu.Y = 30;
 		kossu.Tag = "aines";
 		tuoteLista.Add (kossu);
 		Add (kossu);
@@ -229,7 +230,7 @@ public class kinkkuHefe : PhysicsGame
 
 	void OnkoKinkunPaalla(){			//Suolan Lisäys kinkkuun
 		if (Mouse.IsCursorOn (kinkku) && Mouse.IsCursorOn (elamansuola)) {
-			MultiSelectWindow suolaValikko = new MultiSelectWindow ("paljonko laitetaan?", "kolme kuppii", "4 tonnii", "10 metrii"); 
+			MultiSelectWindow suolaValikko = new MultiSelectWindow ("paljonko laitetaan?", "kolme kuppii", "reippahasti käypi askel", "10 metrii"); 
 			elamansuola.Destroy ();
 			Add (suolaValikko);
 			lisattyKinkkuunString.Add ("elämänsuola");
@@ -238,7 +239,7 @@ public class kinkkuHefe : PhysicsGame
 			int i = suolaValikko.SelectedIndex;
 
 		} else if (Mouse.IsCursorOn (kinkku) && Mouse.IsCursorOn (jackdaniels)) {
-			MultiSelectWindow suolaValikko = new MultiSelectWindow ("paljonko laitetaan?", "Ujosti", "puolet meni kokkiin", "Järvisuomi"); 
+			MultiSelectWindow suolaValikko = new MultiSelectWindow ("paljonko laitetaan?", "Ujosti", "puolet meni kokkiin", "no alkosta saa lisää"); 
 			jackdaniels.Destroy ();
 			MessageDisplay.Clear ();
 			lisattyKinkkuunString.Add ("Jack Daniels");
@@ -254,7 +255,7 @@ public class kinkkuHefe : PhysicsGame
 		}
 
 		 else if (Mouse.IsCursorOn (kinkku) && Mouse.IsCursorOn (hksininen)) {
-			MultiSelectWindow suolaValikko = new MultiSelectWindow ("paljonko laitetaan?", "yks kyrsä", "metri Heikki", "Kela poika"); 
+			MultiSelectWindow suolaValikko = new MultiSelectWindow ("paljonko laitetaan?", "yks kyrsä", "metri Heikki", "Palomihetki on kateellisii"); 
 			hksininen.Destroy ();
 			MessageDisplay.Clear ();
 			lisattyKinkkuunString.Add ("HK-Sininen");

@@ -68,9 +68,11 @@
     <Compile Include="Ohjelma.cs" />
     <Compile Include="Kuvat.cs" />
     <Compile Include="kinkkuHefe.cs" />
+    <Compile Include="Tuote.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
+    <None Include="Content\RumatIhmiset.mp3" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Icon.png" />
@@ -105,6 +107,8 @@
     <BundleResource Include="Content\KEITTIO_V6.jpg" />
     <BundleResource Include="Content\hefeLogo.png" />
     <BundleResource Include="Content\keittioAlku.png" />
+    <BundleResource Include="Content\sisa.png" />
+    <BundleResource Include="Content\ulkokuori.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\" />

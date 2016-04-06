@@ -7,18 +7,33 @@ using Jypeli.Widgets;
 
 
 	
-	public class Kuvat : PhysicsGame
+public class Kuvat : PhysicsObject
 	{
 
 
 
 	public string Nimi { get; set;}
 	public Image Kuva { get; set;}
+	public PhysicsObject Tuote {get; set;}
 
 
-	public Kuvat(String nimi, Image kuva){
+	public Kuvat(string nimi, double kokoX, double kokoY, int paikkaX, int paikkaY) : base (nimi, kokoX, kokoY, paikkaX, paikkaY){
 		Nimi = nimi;
-		Kuva = kuva;
+		//Kuva = LoadImage ("elamansuola");
+		Tuote = new PhysicsObject (kokoX, kokoY, Shape.Rectangle);
+
+
+		Tuote.Image = Kuva;
+
+		Tuote.Y = paikkaY;
+		Tuote.X = paikkaX;
+		//LuoObjekti (paikkaX, paikkaY);
+		Tuote.Image = LoadImage(Nimi);
+		//Tuote.Image = Kuva;
+		Add(Tuote);
+
+		 
+
 
 
 	}
@@ -27,15 +42,20 @@ using Jypeli.Widgets;
 	//suola.LuoObjekti();
 
 
-	public void LuoObjekti(){
+	public void AsetaKoordinaatti(){
 
-		PhysicsObject ob = new PhysicsObject (50, 90, Shape.Rectangle);
 
-		ob.Image = Kuva;
-		ob.Y = -80;
-		Add (ob);
+
+		//Tuote.Image = Kuva;
+
+		//Add (Tuote);
 
 	
+	}
+
+	public void AsetaMaailmaan(){
+		
+		Add (Tuote);
 	}
 }
 /*

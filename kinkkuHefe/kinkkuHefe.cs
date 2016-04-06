@@ -4,6 +4,9 @@ using Jypeli;
 using Jypeli.Assets;
 using Jypeli.Controls;
 using Jypeli.Widgets;
+using Jypeli.Effects;
+using Jypeli.Content;
+using Microsoft.Xna.Framework.Audio;
 
 
 
@@ -44,32 +47,40 @@ public class kinkkuHefe : PhysicsGame
 
 	PhysicsObject logo;				// Logo fysiikkaolioksi
 
-
+	GameObject sisa = new GameObject (LoadImage ("sisa")); //pyorii
 
 
 	public override void Begin ()
 	{
+		//MediaPlayer.Play("RumatIhmiset");
 		SetWindowSize (1920, 1080);								// Ikkunan koko sama kuin taustakuvien resoluutio
 		IsFullScreen = true; 									// Peli asetetaan kokonäytölle.	
 		Camera.ZoomToLevel (100);								// Koko tausta näkyvillä.
 		Mouse.IsCursorVisible = true; 							// Hiiri näkyviin.
 		SmoothTextures = false;									// Reunojen pehmennys pois käytöstä.
 		Level.Background.Image = keittiokohtaus; 					// Ladataan keittiöstä kuva pelin taustaksi.
-		Valikko ();												// Kutsutaan valikkoa heti alkuun, niin ei tarvitse pelaajan ESCiä painella.
+		Valikko ();	 										// Kutsutaan valikkoa heti alkuun, niin ei tarvitse pelaajan ESCiä painella.
 	}
 
 
 		void PeliKayntiin()
 		{
-		Remove (logo);	
-		//ClearAll(); 											// Tyhjennetään kenttä kaikista objekteista
+		
+
+
+		Remove (logo);											// Tyhjennetään kenttä kaikista objekteista
 		pisteenLasku = 0;
+
 		Level.Background.Image = keittiokohtaus; 					// Ladataan keittiöstä kuva pelin taustaksi
 			Ainekset(ainekset);										// Lisätään ainekset kentälle, kun on valittu, että lähdetään paistamaan kinkkua.
 
+		Kuvat<PhysicsObject> suola = new Kuvat ("elamansuola", Level.Width * 0.08, Level.Height * 0.1, 30, 0);
+		//suola.AsetaKoordinaatti ();
+
+
 			// HIIREN KÄYTTÖ OBJEKTIEN LIIKUTTELUUN & TUTKIMISEEN
 			//Mouse.Listen (MouseButton.Left, ButtonState.Pressed, KuunteleLiiketta2, "Jos ei koordinaatio riitä ;D");
-			Mouse.Listen (MouseButton.Left, ButtonState.Down, OnkoJoValmista, "Lisää aineksia kinkkuun mausteeksi.");
+				Mouse.Listen (MouseButton.Left, ButtonState.Down, OnkoJoValmista, "Lisää aineksia kinkkuun mausteeksi.");
 			Mouse.Listen (MouseButton.Left, ButtonState.Released, OnkoKinkunPaalla, null);
 
 			// VALIKKOON MENEMINEN
@@ -99,6 +110,9 @@ public class kinkkuHefe : PhysicsGame
 	void HallOfKinkkuhefe()
 	{
 		// Fetchaa suoraa koneen käyttäjän nimi joka on oletuksena topscore nicki
+
+		// VALIKKOON MENEMINEN
+		Keyboard.Listen (Key.Escape, ButtonState.Pressed, Valikko, "Avaa valikko");
 	}
 
 	void KuunteleLiiketta2()
@@ -118,6 +132,8 @@ public class kinkkuHefe : PhysicsGame
 		kinkku.Angle = Angle.FromDegrees (30);
 		Add (kinkku);
 
+
+		/*
 		elamansuola = new PhysicsObject (Level.Width * 0.08, Level.Height * 0.1, Shape.Circle);
 		elamansuola.Image = LoadImage("elamansuola"); 				// Lisätään suolapurkki
 		elamansuola.X = 30;
@@ -125,7 +141,7 @@ public class kinkkuHefe : PhysicsGame
 		elamansuola.Tag = "aines";
 		tuoteLista.Add (elamansuola);
 		Add (elamansuola);
-
+*/
 		hksininen = new PhysicsObject (Level.Width * 0.1, Level.Height * 0.05);
 		hksininen.Image = LoadImage("hksininen"); 					// Lisätään HK:n sininen eli makkara
 		hksininen.X = 240;
@@ -175,15 +191,38 @@ public class kinkkuHefe : PhysicsGame
 	}
 
 	void OnkoJoValmista(){
-		if (lisattyKinkkuunString.Count >= 4) {
-			Widget ruutu1 = new Widget (100.0, 50.0);
-			Label lisatytmausteet = new Label ("Hei sul ois jo tarpeeks aineita");
-			ruutu1.Add (lisatytmausteet);
-			Add (ruutu1);
+		if (lisattyKinkkuunString.Count >= 1) {
+
+			MultiSelectWindow kinkkuUuniinValikko = new MultiSelectWindow ("jee jee maustee jees mut laitetaankos lisa lämpöö", "kinkkuu", "vähänlisää", "justiina");
+			Add (kinkkuUuniinValikko);
+
+			kinkkuUuniinValikko.AddItemHandler (0, kinkkuUuniin);
+			kinkkuUuniinValikko.AddItemHandler (1, PeliKayntiin);
+			kinkkuUuniinValikko.AddItemHandler (2, Valikko);
+
 		} else {
 			KuunteleLiiketta ();
 		}
 
+	}
+	void kinkkuUuniin(){
+		GameObject alakuori = new GameObject (LoadImage ("ulkokuori"));
+
+		Add (alakuori);
+
+		sisa.Angle = Angle.FromDegrees (-300);
+		Add (sisa);
+
+		/*
+		Timer ajastin = new Timer ();
+		ajastin.Interval = 1.5;
+		ajastin.Timeout += KaanaKelloa ();
+		ajastin.Start (20);
+*/
+
+	}
+	void KaanaKelloa(){
+		sisa.Angle = Angle.FromDegrees (20);
 	}
 
 	void KuunteleLiiketta2(AnalogState hiirenTila)

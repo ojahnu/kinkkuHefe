@@ -7,7 +7,7 @@ using Jypeli.Widgets;
 
 
 	
-public class Kuvat : PhysicsObject
+public class Kuvat : kinkkuHefe
 	{
 
 
@@ -17,7 +17,7 @@ public class Kuvat : PhysicsObject
 	public PhysicsObject Tuote {get; set;}
 
 
-	public Kuvat(string nimi, double kokoX, double kokoY, int paikkaX, int paikkaY) : base (nimi, kokoX, kokoY, paikkaX, paikkaY){
+	public Kuvat(string nimi, double kokoX, double kokoY, int paikkaX, int paikkaY){// : base (nimi, kokoX, kokoY, paikkaX, paikkaY){
 		Nimi = nimi;
 		//Kuva = LoadImage ("elamansuola");
 		Tuote = new PhysicsObject (kokoX, kokoY, Shape.Rectangle);

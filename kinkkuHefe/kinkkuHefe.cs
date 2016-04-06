@@ -47,7 +47,7 @@ public class kinkkuHefe : PhysicsGame
 
 	PhysicsObject logo;				// Logo fysiikkaolioksi
 
-	GameObject sisa = new GameObject (LoadImage ("sisa")); //pyorii
+	//GameObject sisa = new GameObject (LoadImage ("sisa")); //pyorii
 
 
 	public override void Begin ()
@@ -74,7 +74,7 @@ public class kinkkuHefe : PhysicsGame
 		Level.Background.Image = keittiokohtaus; 					// Ladataan keittiöstä kuva pelin taustaksi
 			Ainekset(ainekset);										// Lisätään ainekset kentälle, kun on valittu, että lähdetään paistamaan kinkkua.
 
-		Kuvat<PhysicsObject> suola = new Kuvat ("elamansuola", Level.Width * 0.08, Level.Height * 0.1, 30, 0);
+		//Kuvat<PhysicsObject> suola = new Kuvat ("elamansuola", Level.Width * 0.08, Level.Height * 0.1, 30, 0);
 		//suola.AsetaKoordinaatti ();
 
 
@@ -208,22 +208,9 @@ public class kinkkuHefe : PhysicsGame
 	void kinkkuUuniin(){
 		GameObject alakuori = new GameObject (LoadImage ("ulkokuori"));
 
-		Add (alakuori);
-
-		sisa.Angle = Angle.FromDegrees (-300);
-		Add (sisa);
-
-		/*
-		Timer ajastin = new Timer ();
-		ajastin.Interval = 1.5;
-		ajastin.Timeout += KaanaKelloa ();
-		ajastin.Start (20);
-*/
 
 	}
-	void KaanaKelloa(){
-		sisa.Angle = Angle.FromDegrees (20);
-	}
+
 
 	void KuunteleLiiketta2(AnalogState hiirenTila)
 	{

@@ -10,6 +10,8 @@
     <MonoMacResourcePrefix>Resources</MonoMacResourcePrefix>
     <AssemblyName>Kinkkuhefe</AssemblyName>
     <SuppressXamMacUpsell>True</SuppressXamMacUpsell>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -68,6 +70,7 @@
     <Compile Include="Kinkkuhefe.cs" />
     <Compile Include="Ohjelma.cs" />
     <Compile Include="Properties\testejä.cs" />
+    <Compile Include="tuote.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
